@@ -15,6 +15,7 @@ public class GithubActivity {
 
     public void getActivity() {
         String GITHUB_URL = "https://api.github.com/users/" + username + "/events";
+        ActivityParser activityParser = new ActivityParser();
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder().
@@ -25,16 +26,16 @@ public class GithubActivity {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println(response.body());
+                activityParser.parseText(response.body());
             } else {
-                System.out.println(response.statusCode());
+                System.err.println("Error: Failed to fetch an activity. Status code: " + response.statusCode());
             }
         }
         catch (IOException ioException) {
-            ioException.printStackTrace();
+            System.err.println("I/O error while communicating with GitHub API.");
         } catch(InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace();
+            System.err.println("Request was interrupted.");
         }
     }
 }

@@ -8,5 +8,6 @@ public class App {
         }
         GithubActivity g = new GithubActivity(args[0]); // send username
         g.getActivity();
+
     }
 }
